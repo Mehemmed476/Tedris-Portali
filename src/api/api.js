@@ -1,20 +1,20 @@
-// src/api/api.js
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3001/api', // Bütün sorğuların başına bu prefiks əlavə olunacaq
+    // DÜZƏLİŞ 1: Ehtiyat (fallback) URL əlavə edildi
+    baseURL: `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`,
 });
 
-// Bu, hər sorğu göndərilməzdən ƏVVƏL işə düşən bir funksiyadır
 api.interceptors.request.use(
     (config) => {
-        // localStorage-dan istifadəçi məlumatını götürürük
-        const user = JSON.parse(localStorage.getItem('user'));
-
-        // Əgər istifadəçi və onun tokeni varsa...
-        if (user && user.token) {
-            // Sorğunun başlığına (header) Authorization əlavə edirik
-            config.headers.Authorization = `Bearer ${user.token}`;
+        try {
+            // DÜZƏLİŞ 2: Əməliyyat təhlükəsiz try...catch bloku içinə alındı
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user && user.token) {
+                config.headers.Authorization = `Bearer ${user.token}`;
+            }
+        } catch (error) {
+            console.error("localStorage-dan istifadəçi məlumatını oxumaq mümkün olmadı:", error);
         }
         return config;
     },
