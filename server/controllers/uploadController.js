@@ -1,9 +1,10 @@
-import cloudinary from 'cloudinary';
+// server/controllers/uploadController.js
+import { v2 as cloudinary } from 'cloudinary'; // DƏYİŞİKLİK: Import üsulu dəyişdi
 import DailyRecord from '../models/DailyRecord.js';
 import Class from '../models/Class.js';
 import fs from 'fs';
 
-cloudinary.v2.config({
+cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
@@ -23,7 +24,8 @@ export const uploadFile = async (req, res) => {
             return res.status(401).json({ message: 'İcazə yoxdur' });
         }
 
-        const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        // DƏYİŞİKLİK: Artıq .v2 yazmağa ehtiyac yoxdur
+        const result = await cloudinary.uploader.upload(req.file.path, {
             resource_type: "auto",
             folder: `tedris-portali/${classId}`
         });
