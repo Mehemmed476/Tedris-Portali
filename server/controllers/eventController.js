@@ -1,10 +1,8 @@
-// server/controllers/eventController.js
-const CalendarEvent = require('../models/CalendarEvent');
-const Class = require('../models/Class');
+import CalendarEvent from '../models/CalendarEvent.js';
+import Class from '../models/Class.js';
 
-const getEventsByClass = async (req, res) => {
+export const getEventsByClass = async (req, res) => {
     try {
-        // Təhlükəsizlik yoxlaması
         const aClass = await Class.findById(req.params.classId);
         if (!aClass || aClass.teacherId.toString() !== req.user.id) {
             return res.status(401).json({ message: 'İcazə yoxdur' });
@@ -14,7 +12,7 @@ const getEventsByClass = async (req, res) => {
     } catch (error) { res.status(500).json({ message: "Server xətası" }); }
 };
 
-const createEvent = async (req, res) => {
+export const createEvent = async (req, res) => {
     const { title, date, type, classId } = req.body;
     try {
         const aClass = await Class.findById(classId);
@@ -25,5 +23,3 @@ const createEvent = async (req, res) => {
         res.status(201).json(event);
     } catch (error) { res.status(500).json({ message: "Server xətası" }); }
 };
-
-module.exports = { getEventsByClass, createEvent };

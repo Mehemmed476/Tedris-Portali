@@ -1,27 +1,23 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const connectDB = require('./config/db');
-
-const authRoutes = require('./routes/authRoutes');
-const classRoutes = require('./routes/classRoutes');
-const studentRoutes = require('./routes/studentRoutes');
-const announcementRoutes = require('./routes/announcementRoutes');
-const dailyRecordRoutes = require('./routes/dailyRecordRoutes');
-const userRoutes = require('./routes/userRoutes');
-const dashboardRoutes = require('./routes/dashboardRoutes');
-const eventRoutes = require('./routes/eventRoutes');
-const uploadRoutes = require('./routes/uploadRoutes');
-
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import classRoutes from './routes/classRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
+import announcementRoutes from './routes/announcementRoutes.js';
+import dailyRecordRoutes from './routes/dailyRecordRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import eventRoutes from './routes/eventRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
+dotenv.config();
 connectDB();
 const app = express();
-const PORT = 3001;
-
+const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
-
 app.get('/', (req, res) => res.send('Server running with MongoDB!'));
-
 app.use('/api/auth', authRoutes);
 app.use('/api/classes', classRoutes);
 app.use('/api/students', studentRoutes);
@@ -31,7 +27,4 @@ app.use('/api/users', userRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/uploads', uploadRoutes);
-
-app.listen(PORT, () => {
-  console.log(`[server] Server ${PORT}-ci portda işə düşdü...`);
-});
+app.listen(PORT, () => { console.log(`[server] Server ${PORT}-ci portda işə düşdü...`); });

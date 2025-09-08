@@ -1,8 +1,8 @@
-const Student = require('../models/Student');
-const Class = require('../models/Class');
-const { generateUniqueCode } = require('../utils/codeGenerator');
+import Student from '../models/Student.js';
+import Class from '../models/Class.js';
+import { generateUniqueCode } from '../utils/codeGenerator.js';
 
-const getStudentsByClass = async (req, res) => {
+export const getStudentsByClass = async (req, res) => {
     try {
         const aClass = await Class.findById(req.params.classId);
         if (!aClass || aClass.teacherId.toString() !== req.user.id) {
@@ -14,7 +14,8 @@ const getStudentsByClass = async (req, res) => {
         res.status(500).json({ message: "Server xətası", error: error.message });
     }
 };
-const createStudent = async (req, res) => {
+
+export const createStudent = async (req, res) => {
     const { name, classId } = req.body;
     try {
         const aClass = await Class.findById(classId);
@@ -35,7 +36,8 @@ const createStudent = async (req, res) => {
         res.status(500).json({ message: "Server xətası", error: error.message });
     }
 };
-const updateStudent = async (req, res) => {
+
+export const updateStudent = async (req, res) => {
     const { name } = req.body;
     try {
         const student = await Student.findById(req.params.id);
@@ -49,7 +51,8 @@ const updateStudent = async (req, res) => {
         res.status(500).json({ message: "Server xətası", error: error.message });
     }
 };
-const deleteStudent = async (req, res) => {
+
+export const deleteStudent = async (req, res) => {
     try {
         const student = await Student.findById(req.params.id);
         if (!student || student.teacherId.toString() !== req.user.id) {
@@ -61,10 +64,10 @@ const deleteStudent = async (req, res) => {
         res.status(500).json({ message: "Server xətası", error: error.message });
     }
 };
-const getStudentDetails = async (req, res) => {
+
+export const getStudentDetails = async (req, res) => {
     try {
-        const student = await Student.findById(req.params.id)
-            .populate('parentUid', 'email');
+        const student = await Student.findById(req.params.id).populate('parentUid', 'email');
         if (!student || student.teacherId.toString() !== req.user.id) {
             return res.status(401).json({ message: 'İcazə yoxdur' });
         }
@@ -73,4 +76,3 @@ const getStudentDetails = async (req, res) => {
         res.status(500).json({ message: "Server xətası" });
     }
 };
-module.exports = { getStudentsByClass, createStudent, updateStudent, deleteStudent, getStudentDetails };

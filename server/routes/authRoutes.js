@@ -1,13 +1,8 @@
-// server/routes/authRoutes.js
-const express = require('express');
+// authRoutes.js
+import express from 'express';
+import { registerUser, loginUser, loginStudent } from '../controllers/authController.js';
 const router = express.Router();
-const { registerUser, loginUser, loginStudent } = require('../controllers/authController');
-
-// Müəllim və Valideyn üçün
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-
-// Şagird üçün
 router.post('/student-login', loginStudent);
-
-module.exports = router;
+export default router;

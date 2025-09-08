@@ -1,10 +1,10 @@
-const express = require('express');
+// dailyRecordRoutes.js
+import express from 'express';
+import { getRecordByDate, upsertRecord, askQuestion, answerQuestion } from '../controllers/dailyRecordController.js';
+import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
-const { getRecordByDate, upsertRecord, askQuestion } = require('../controllers/dailyRecordController');
-const { protect } = require('../middleware/authMiddleware');
-
 router.get('/class/:classId/date/:date', protect, getRecordByDate);
 router.post('/', protect, upsertRecord);
 router.post('/ask-question', protect, askQuestion);
-
-module.exports = router;
+router.post('/answer-question', protect, answerQuestion);
+export default router;

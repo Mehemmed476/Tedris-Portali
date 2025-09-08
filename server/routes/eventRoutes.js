@@ -1,10 +1,8 @@
-// server/routes/eventRoutes.js
-const express = require('express');
+// eventRoutes.js
+import express from 'express';
+import { getEventsByClass, createEvent } from '../controllers/eventController.js';
+import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
-const { getEventsByClass, createEvent } = require('../controllers/eventController');
-const { protect } = require('../middleware/authMiddleware');
-
 router.route('/class/:classId').get(protect, getEventsByClass);
 router.route('/').post(protect, createEvent);
-
-module.exports = router;
+export default router;

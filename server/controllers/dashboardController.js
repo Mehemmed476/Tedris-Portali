@@ -1,11 +1,11 @@
-const Student = require('../models/Student');
-const Class = require('../models/Class');
-const User = require('../models/User');
-const Announcement = require('../models/Announcement');
-const DailyRecord = require('../models/DailyRecord');
-const CalendarEvent = require('../models/CalendarEvent');
+import Student from '../models/Student.js';
+import Class from '../models/Class.js';
+import User from '../models/User.js';
+import Announcement from '../models/Announcement.js';
+import DailyRecord from '../models/DailyRecord.js';
+import CalendarEvent from '../models/CalendarEvent.js';
 
-const getParentDashboardData = async (req, res) => {
+export const getParentDashboardData = async (req, res) => {
     try {
         const parentUser = req.user;
         if (parentUser.role !== 'valideyn' || !parentUser.linkedStudentId) {
@@ -28,16 +28,12 @@ const getParentDashboardData = async (req, res) => {
             const grades = record.grades?.get(studentIdStr);
             const testResults = record.testResults?.get(studentIdStr);
             const studentQuestions = record.questions.filter(q => q.studentId._id.toString() === studentIdStr);
-
             if (attendance || grades || testResults || studentQuestions.length > 0 || record.attachments?.length > 0) {
                 return {
-                    date: record.date,
-                    dailyHomeworkText: record.homework,
+                    date: record.date, dailyHomeworkText: record.homework,
                     grades: { homework: grades?.homework?.score ?? null, activity: grades?.activity ?? null, discipline: grades?.discipline ?? null, },
-                    attendance: attendance,
-                    testResults: testResults ?? null,
-                    questions: studentQuestions,
-                    attachments: record.attachments, // YENİ
+                    attendance: attendance, testResults: testResults ?? null,
+                    questions: studentQuestions, attachments: record.attachments,
                 };
             }
             return null;
@@ -47,7 +43,7 @@ const getParentDashboardData = async (req, res) => {
     } catch (error) { res.status(500).json({ message: "Server xətası", error: error.message }); }
 };
 
-const getStudentDashboardData = async (req, res) => {
+export const getStudentDashboardData = async (req, res) => {
     try {
         const student = await Student.findById(req.user.id);
         if (!student) { return res.status(404).json({ message: 'Şagird profili tapılmadı' }); }
@@ -69,13 +65,10 @@ const getStudentDashboardData = async (req, res) => {
             
             if (attendance || grades || testResults || studentQuestions.length > 0 || record.attachments?.length > 0) {
                 return {
-                    date: record.date,
-                    dailyHomeworkText: record.homework,
+                    date: record.date, dailyHomeworkText: record.homework,
                     grades: { homework: grades?.homework?.score ?? null, activity: grades?.activity ?? null, discipline: grades?.discipline ?? null, },
-                    attendance: attendance,
-                    testResults: testResults ?? null,
-                    questions: studentQuestions,
-                    attachments: record.attachments, // YENİ
+                    attendance: attendance, testResults: testResults ?? null,
+                    questions: studentQuestions, attachments: record.attachments,
                 };
             }
             return null;
@@ -84,5 +77,3 @@ const getStudentDashboardData = async (req, res) => {
         res.status(200).json({ student, classData, teacher, announcements, dailyRecords: studentSpecificRecords, events });
     } catch (error) { res.status(500).json({ message: "Server xətası", error: error.message }); }
 };
-
-module.exports = { getParentDashboardData, getStudentDashboardData };

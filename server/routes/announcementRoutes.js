@@ -1,10 +1,8 @@
-// server/routes/announcementRoutes.js
-const express = require('express');
+// announcementRoutes.js
+import express from 'express';
+import { getAnnouncementsByClass, createAnnouncement } from '../controllers/announcementController.js';
+import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
-const { getAnnouncementsByClass, createAnnouncement } = require('../controllers/announcementController');
-const { protect } = require('../middleware/authMiddleware');
-
 router.route('/class/:classId').get(protect, getAnnouncementsByClass);
 router.route('/').post(protect, createAnnouncement);
-
-module.exports = router;
+export default router;

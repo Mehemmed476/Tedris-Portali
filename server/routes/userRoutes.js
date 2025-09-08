@@ -1,9 +1,7 @@
-// server/routes/userRoutes.js
-const express = require('express');
+// userRoutes.js
+import express from 'express';
+import { linkParentAccount } from '../controllers/userController.js';
+import { protect } from '../middleware/authMiddleware.js';
 const router = express.Router();
-const { linkParentAccount } = require('../controllers/userController');
-const { protect } = require('../middleware/authMiddleware');
-
 router.post('/link-account', protect, linkParentAccount);
-
-module.exports = router;
+export default router;
